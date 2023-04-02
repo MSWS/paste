@@ -151,7 +151,6 @@ const generateLink = (mode) => {
 // Open the "Copy" bar and select the content
 const showCopyBar = (dataToCopy) => {
     copyToClipboard(dataToCopy);
-    // await (navigator.clipboard).write(dataToCopy);
     let orig = byId("copy-button").innerText;
     byId("copy-button").innerText = "Copied!";
     setTimeout(() => {
@@ -161,6 +160,7 @@ const showCopyBar = (dataToCopy) => {
 
 // return a promise
 function copyToClipboard(textToCopy) {
+    window.history.pushState({}, '', textToCopy);
     // navigator clipboard api needs a secure context (https)
     if (navigator.clipboard && window.isSecureContext) {
         // navigator clipboard api method'
@@ -185,23 +185,37 @@ function initSaveListener() {
     document.addEventListener('keydown', e => {
         if (e.ctrlKey && e.key === 's') {
             e.preventDefault();
-            sendPost();
+            saveButton();
         }
     });
 }
 
+function saveButton() {
+    let orig = byId("save-button").innerText;
+    byId("save-button").innerText = "Saving...";
+    sendPost().then(link => {
+        copyToClipboard(link);
+        byId("save-button").innerText = "Saved!";
+        setTimeout(() => {
+            byId("save-button").innerText = orig;
+        }, 400);
+    });
+
+}
+
 function sendPost() {
-    fetch("https://haste.msws.xyz/documents", {
+    result = fetch("https://haste.msws.xyz/documents", {
         method: "POST",
         body: editor.getValue()
     }).then(res => res.json()).then(json => {
         const base = `${location.protocol}//${location.host}${location.pathname}`;
         const query = (shorten('Plain Text') === select.selected()) ? '' : `?l=${encodeURIComponent(select.selected())}`;
         const url = base + query + '#haste/' + json.key;
-        showCopyBar(url);
+        return url;
     }).catch(err => {
         console.error(err);
     });
+    return result;
 }
 
 // Close the "Copy" bar

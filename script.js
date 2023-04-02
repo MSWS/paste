@@ -194,11 +194,18 @@ function saveButton() {
     let orig = byId("save-button").innerText;
     byId("save-button").innerText = "Saving...";
     sendPost().then(link => {
+        if(!link) {
+            byId("save-button").innerText = "Failed";
+            setTimeout(() => {
+                byId("save-button").innerText = orig;
+            }, 1600);
+            return;
+        }
         copyToClipboard(link);
         byId("save-button").innerText = "Saved!";
         setTimeout(() => {
             byId("save-button").innerText = orig;
-        }, 400);
+        }, 800);
     });
 
 }

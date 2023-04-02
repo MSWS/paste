@@ -92,6 +92,16 @@ a:focus {
     font-weight: bold;
 }
 
+#save-button:hover {
+    color: #71CB78;
+    background-color: rgba(79, 146, 83, 0.5) !important;
+}
+
+#save-button {
+    background-color: rgba(128, 255, 128, 0.15);
+    color: #00D61C;
+    font-weight: bold;
+}
 
 .CodeMirror {
     height: 100%;

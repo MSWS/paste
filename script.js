@@ -191,20 +191,26 @@ function initSaveListener() {
 }
 
 function saveButton() {
-    let orig = byId("save-button").innerText;
-    byId("save-button").innerText = "Saving...";
+    const button = byId("save-button");
+    if (button.disabled)
+        return;
+    let orig = button.innerText;
+    button.innerText = "Saving...";
+    button.disabled = true;
     sendPost().then(link => {
-        if(!link) {
-            byId("save-button").innerText = "Failed";
+        if (!link) {
+            button.innerText = "Failed";
             setTimeout(() => {
-                byId("save-button").innerText = orig;
+                button.innerText = orig;
+                button.disabled = false;
             }, 1600);
             return;
         }
         copyToClipboard(link);
-        byId("save-button").innerText = "Saved!";
+        button.innerText = "Saved!";
         setTimeout(() => {
-            byId("save-button").innerText = orig;
+            button.innerText = orig;
+            button.disabled = false;
         }, 800);
     });
 

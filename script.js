@@ -217,7 +217,7 @@ function saveButton() {
 }
 
 function sendPost() {
-    result = fetch("https://haste.msws.xyz/documents", {
+    result = fetch("https://haste.msws.xyz/documents/", {
         method: "POST",
         body: editor.getValue()
     }).then(res => res.json()).then(json => {

@@ -30,7 +30,7 @@ const initCodeEditor = () => {
 
     statsEl = byId('stats');
     editor.on('change', () => {
-        statsEl.innerHTML = `${editor.getValue().length} chars, ${editor.getValue().split(' ').length} words`;
+        statsEl.innerHTML = `${editor.getValue().length} chars, ${editor.getValue().split(' ').length} spaces`;
         hideCopyBar();
     });
 };
@@ -92,7 +92,7 @@ const initCode = () => {
         return;
     }
 
-    if (base64.startsWith('raw/')) {
+    if (base64.startsWith('raw/'))  {
         fetch(base64.substring(4)).then(res => res.text()).then(text => editor.setValue(text));
         return;
     }
